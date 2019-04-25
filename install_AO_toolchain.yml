@@ -1,0 +1,47 @@
+---
+##################################################
+# Ansible Play to Install F5 Automation ToolChain
+##################################################
+
+- name: Install F5 Automation Toolchain
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  vars:
+    username: "admin"
+    password: "admin"
+    bigip_ip: "192.168.110.21"
+    TS_PKG_NAME: "f5-telemetry-1.2.0-1.noarch.rpm"
+    DO_PKG_NAME: "f5-declarative-onboarding-1.3.0-4.noarch.rpm"
+    AS3_PKG_NAME: "f5-appsvcs-3.10.0-5.noarch.rpm"
+
+  tasks:
+   - name: Install F5 Declarative Onboarding
+     bigip_iapplx_package:
+      validate_certs: "no"
+      package: "{{ DO_PKG_NAME }}"
+      password: "{{ password }}"
+      server: "{{ bigip_ip }}"
+      state: present
+      user: "{{ username }}"
+     delegate_to: localhost
+
+   - name: Install F5 AS3
+     bigip_iapplx_package:
+      validate_certs: "no"
+      package: "{{ AS3_PKG_NAME }}"
+      password: "{{ password }}"
+      server: "{{ bigip_ip }}"
+      state: present
+      user: "{{ username }}"
+     delegate_to: localhost
+
+   - name: Install F5 Telemetry Streaming
+     bigip_iapplx_package:
+      validate_certs: "no"
+      package: "{{ TS_PKG_NAME }}"
+      password: "{{ password }}"
+      server: "{{ bigip_ip }}"
+      state: present
+      user: "{{ username }}"
+     delegate_to: localhost
